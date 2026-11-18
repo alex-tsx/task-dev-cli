@@ -1,0 +1,36 @@
+{
+  "name": "@task-dev/cli",
+  "version": "0.1.0",
+  "description": "Install task-versioned npm dependencies and link local packages without losing their dependency graph.",
+  "type": "module",
+  "bin": {
+    "task-dev": "bin/task-dev.js"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.9.0",
+    "npm": ">=11.10.0 <12"
+  },
+  "scripts": {
+    "test": "node --test",
+    "test:integration": "node --test test/integration.test.js",
+    "prepublishOnly": "npm test"
+  },
+  "dependencies": {
+    "cross-spawn": "^7.0.6",
+    "semver": "^7.8.6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alex-tsx/task-dev-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alex-tsx/task-dev-cli/issues"
+  },
+  "homepage": "https://github.com/alex-tsx/task-dev-cli#readme",
+  "license": "UNLICENSED"
+}
