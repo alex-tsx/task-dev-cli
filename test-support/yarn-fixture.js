@@ -13,7 +13,8 @@ const cli = fileURLToPath(new URL('../bin/task-dev.js', import.meta.url));
 const npm = process.env.npm_execpath;
 
 export async function yarnFixture(t, variant) {
-  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'task dev yarn ')));
+  // Windows TEMP can use an 8.3 alias; PnP's path map needs the same native path as Node.
+  const root = fs.realpathSync.native(fs.mkdtempSync(path.join(os.tmpdir(), 'task dev yarn ')));
   const app = path.join(root, 'app');
   const bin = path.join(root, 'bin');
   fs.mkdirSync(app);

@@ -66,7 +66,7 @@ test('real npm: multiple local packages keep the graph and expose live source ed
   for (const [name, source] of [['@fixture/sdk', sdk], ['@fixture/rest', rest]]) {
     const installedPath = path.join(fixture.app, 'node_modules', name);
     assert.ok(fs.lstatSync(installedPath).isSymbolicLink());
-    assert.equal(fs.realpathSync(installedPath), fs.realpathSync(source));
+    assert.equal(fs.realpathSync.native(installedPath), fs.realpathSync.native(source));
   }
   const lock = JSON.parse(fixture.read('package-lock.json'));
   assert.equal(lock.packages['node_modules/transitive']?.version, '1.0.0', installed.output + JSON.stringify(lock));
@@ -163,7 +163,7 @@ test('real npm: relinking a changed manifest refreshes directory dependencies', 
 });
 
 async function setup(t) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'task dev integration '));
+  const root = fs.realpathSync.native(fs.mkdtempSync(path.join(os.tmpdir(), 'task dev integration ')));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const app = path.join(root, 'app');
   fs.mkdirSync(app);

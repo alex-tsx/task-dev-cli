@@ -81,7 +81,7 @@ for (const variant of ['classic', 'node-modules', 'pnp']) {
     assert.equal(fs.existsSync(path.join(fixture.app, 'package-lock.json')), false);
     assert.equal(fs.existsSync(path.join(sdk, 'node_modules')), fixture.classic);
     if (variant === 'pnp') assert.equal(fs.existsSync(path.join(fixture.app, 'node_modules')), false);
-    else assert.equal(fs.realpathSync(path.join(fixture.app, 'node_modules/@fixture/sdk')), fs.realpathSync(sdk));
+    else assert.equal(fs.realpathSync.native(path.join(fixture.app, 'node_modules/@fixture/sdk')), fs.realpathSync.native(sdk));
     fs.writeFileSync(path.join(sdk, 'index.js'), "module.exports = require('transitive') + ':live';\n");
     const runtime = await fixture.runtime("console.log(require('@fixture/sdk'))");
     assert.equal(runtime.status, 0, runtime.output);
@@ -130,6 +130,7 @@ for (const variant of ['classic', 'pnp']) {
   test(`Yarn ${variant}: the installed published CLI runs through Yarn`, async t => {
     const fixture = await yarnFixture(t, variant);
     const root = fileURLToPath(new URL('../', import.meta.url));
+    const version = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8')).version;
     const pending = [root];
     const visited = new Set();
     for (const directory of pending) {
@@ -139,12 +140,13 @@ for (const variant of ['classic', 'pnp']) {
       fixture.publishDirectory(directory);
       for (const name of Object.keys(manifest.dependencies ?? {})) pending.push(path.join(root, 'node_modules', name));
     }
-    fixture.project({ devDependencies: { '@task-dev/cli': '0.1.0' } });
-    const bootstrap = await fixture.yarn(['install']);
+    fixture.project({ devDependencies: { '@task-dev/cli': version } });
+    // This creates the initial lockfile, even when the surrounding test suite runs in CI.
+    const bootstrap = await fixture.yarn(['install', ...(fixture.classic ? [] : ['--no-immutable'])]);
     assert.equal(bootstrap.status, 0, bootstrap.output);
     let result = await fixture.yarn(['task-dev', '--version']);
     assert.equal(result.status, 0, result.output);
-    assert.match(result.stdout, /0.1.0/);
+    assert.ok(result.stdout.split(/\r?\n/).includes(version), result.output);
     const lock = fixture.read('yarn.lock');
     result = await fixture.yarn(['task-dev', 'ci']);
     assert.equal(result.status, 0, result.output);
@@ -205,7 +207,7 @@ test('Yarn node-modules replaces an installed copy with a portal after nested de
   const sdk = fixture.source('sdk', '1.0.0', { dependencies: { transitive: '1.0.0' } });
   result = await fixture.run(['link', sdk]);
   assert.equal(result.status, 0, result.output);
-  assert.equal(fs.realpathSync(path.join(fixture.app, 'node_modules/sdk')), sdk);
+  assert.equal(fs.realpathSync.native(path.join(fixture.app, 'node_modules/sdk')), fs.realpathSync.native(sdk));
 });
 
 test('Classic experimental PnP is rejected before changing project files', async t => {

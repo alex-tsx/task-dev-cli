@@ -1,6 +1,6 @@
 {
   "name": "@task-dev/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Install task-versioned dependencies and link local packages with npm or Yarn.",
   "type": "module",
   "bin": {
@@ -9,7 +9,8 @@
   "files": [
     "bin/",
     "lib/",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "engines": {
     "node": ">=22.9.0"
@@ -34,7 +35,7 @@
     "url": "https://github.com/alex-tsx/task-dev-cli/issues"
   },
   "homepage": "https://github.com/alex-tsx/task-dev-cli#readme",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "devDependencies": {
     "yarn-classic": "npm:yarn@1.22.22",
     "yarn-modern": "npm:@yarnpkg/cli-dist@4.18.1"

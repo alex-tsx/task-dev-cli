@@ -12,7 +12,7 @@ manager installation; the CLI does not download or switch Yarn versions.
 
 ## Usage
 
-After publication:
+Install with npm:
 
 ```sh
 npm install --save-dev @task-dev/cli
@@ -33,19 +33,12 @@ yarn task-dev ci
 For pipelines and empty checkouts, pin the CLI version:
 
 ```sh
-npx --yes @task-dev/cli@0.1.0 ci
+npx --yes @task-dev/cli@0.1.1 ci
 ```
 
-Yarn 4 also supports `yarn dlx @task-dev/cli@0.1.0 ci`. Yarn Classic has no `dlx`;
+Yarn 4 also supports `yarn dlx @task-dev/cli@0.1.1 ci`. Yarn Classic has no `dlx`;
 install the CLI in the project or invoke it with npx. Launching through npx still
 selects Yarn when the project declares Yarn or has a `yarn.lock`.
-
-Before publication, point npx at the CLI repo without adding it to the main project:
-
-```sh
-npx --yes --package=/absolute/path/to/task-dev-cli -- task-dev i
-npx --yes --package=/absolute/path/to/task-dev-cli -- task-dev link ../dep-1 ../dep-2 ../dep-3
-```
 
 Optional npm-script aliases in the main project:
 
@@ -275,6 +268,15 @@ successful installation does not verify the app's build or dev server.
 
 ## Development
 
+Run a local CLI checkout from a consumer project without adding it as a dependency:
+
+```sh
+npx --yes --package=/absolute/path/to/task-dev-cli -- task-dev i
+npx --yes --package=/absolute/path/to/task-dev-cli -- task-dev link ../dep-1 ../dep-2 ../dep-3
+```
+
+In the CLI repo:
+
 ```sh
 npm ci
 npm test
@@ -291,5 +293,5 @@ frozen lockfiles, platform-specific optional dependencies, relinking, and the CL
 installed from a packed package. These Yarn tools are development dependencies;
 users run their own Yarn installation.
 
-Only `bin/`, `lib/`, the manifest and this README are published. No build step is
-needed. No open-source license has been selected (`UNLICENSED`).
+Only `bin/`, `lib/`, the manifest, this README and `LICENSE` are published. No build
+step is needed. Licensed under the [MIT License](LICENSE).
