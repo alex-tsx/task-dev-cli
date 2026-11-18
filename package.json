@@ -1,7 +1,7 @@
 {
   "name": "@task-dev/cli",
   "version": "0.1.0",
-  "description": "Install task-versioned npm dependencies and link local packages without losing their dependency graph.",
+  "description": "Install task-versioned dependencies and link local packages with npm or Yarn.",
   "type": "module",
   "bin": {
     "task-dev": "bin/task-dev.js"
@@ -12,17 +12,19 @@
     "README.md"
   ],
   "engines": {
-    "node": ">=22.9.0",
-    "npm": ">=11.10.0 <12"
+    "node": ">=22.9.0"
   },
   "scripts": {
     "test": "node --test",
-    "test:integration": "node --test test/integration.test.js",
+    "test:integration": "node --test test/integration.test.js test/yarn.integration.test.js",
+    "test:yarn": "node --test test/package-manager.test.js test/yarn-peers.test.js test/yarn.integration.test.js",
     "prepublishOnly": "npm test"
   },
   "dependencies": {
+    "@yarnpkg/lockfile": "^1.1.0",
     "cross-spawn": "^7.0.6",
-    "semver": "^7.8.6"
+    "semver": "^7.8.6",
+    "yaml": "^2.9.1"
   },
   "repository": {
     "type": "git",
@@ -32,5 +34,9 @@
     "url": "https://github.com/alex-tsx/task-dev-cli/issues"
   },
   "homepage": "https://github.com/alex-tsx/task-dev-cli#readme",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "yarn-classic": "npm:yarn@1.22.22",
+    "yarn-modern": "npm:@yarnpkg/cli-dist@4.18.1"
+  }
 }

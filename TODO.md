@@ -1,0 +1,3 @@
+- Have `npx task-dev link` rename linked repos' node_modules folders. Plus, support `packaje.json:taskDev: { linkedPackagesNodeModules: 'dev_node_modules' }`.
+- - Allow `npx task-dev i` install packages with linked packages preservation (and renamed node_modules respect).
+-

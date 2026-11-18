@@ -17,7 +17,7 @@ for (const command of ['i', 'ci']) {
     const result = fixture(t, { command, args: ['--ignore-scripts'] });
     const npmCommand = command === 'i' ? 'install' : 'ci';
     assert.equal(result.status, 0, result.output);
-    assert.deepEqual(result.calls, [[npmCommand, '--ignore-scripts'], [npmCommand, '--force', '--ignore-scripts'], ['ls', '--json', '--all']]);
+    assert.deepEqual(result.calls, [['--version'], [npmCommand, '--ignore-scripts'], [npmCommand, '--force', '--ignore-scripts'], ['ls', '--json', '--all']]);
   });
 }
 
@@ -25,7 +25,7 @@ test('success and unrelated failures preserve npm exit codes without retry', t =
   for (const code of [0, 2, 42]) {
     const result = fixture(t, { firstCode: code, output: 'ordinary npm output\n' });
     assert.equal(result.status, code, result.output);
-    assert.deepEqual(result.calls, [['install']]);
+    assert.deepEqual(result.calls, [['--version'], ['install']]);
   }
 });
 
@@ -65,6 +65,7 @@ function fixture(t, config) {
 const config = ${JSON.stringify(data)};
 const args = process.argv.slice(2);
 fs.appendFileSync(${JSON.stringify(calls)}, JSON.stringify(args) + '\\n');
+if (args[0] === '--version') { console.log('11.17.0'); process.exit(0); }
 if (args[0] === 'ls') {
   process.stdout.write(typeof config.tree === 'string' ? config.tree : JSON.stringify(config.tree));
   process.exit(config.lsCode);
